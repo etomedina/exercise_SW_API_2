@@ -263,50 +263,7 @@ def add_new_favorite_character2(character_fav):
         )
     return jsonify(planet_favorite.serialize()), 201
 
-#9. borrar favorito, planeta por su id
-@app.route('/favorite/planet/', methods=['DELETE'])
-def delete_fav_planet():
-    stmt = select(Favorite).where(Favorite.id_user == "1" and Favorite.planet_fav =="2")
-    favorite1= Favorite.query.get(stmt[id])
-    db.session.delete(favorite1)
-    db.session.commit()
-    return jsonify({"msg": f"favorite id:{stmt[id]} has been deleted succesfully"}),204
 
-# def delete_fav_planet(id):
-    # id=request.args.get("id", default="", type=str)
-    # id=request.args.get("id")
-    # id_planet=request.args.get("planet_fav", default="", type=str)
-    # print(id_user,id_planet)
-
-    # query2= Favorite.query.filter(Favorite.planet_fav==id_planet).all()
-    # stmt = select(Favorite).where(favorite.id_user == "1" and favorite.planet_fav =="2")
-    # stmt = select(user_table).where(user_table.c.name == 'spongebob')
-
-    # query = Favorite.query.get((id))
-    # query1=db.session.query(Favorite).get((id))
-    # if query1 is None:
-    #     return jsonify({
-    #         "msg": "not found"
-    #         }), 404
-    # db.session.delete(query1)
-    # db.session.commit()
-    # return print( { "msg": "favorite id{id_planet}was deleted "}), 204 
-
-#10. borrar favorito, people por su id
-@app.route('/favorite/character/<int:character_fav>', methods=['DELETE'])
-def delete_fav_character(character_fav):
-    id_user=request.args.get("id_user")
-    id_people=request.args.get("character_fav")
-    query = Favorite.query.get((id_user,id_people))
-    query1=db.session.query(Favorite).get((id_user,id_people))
-    if query is None:
-        return jsonify({
-            "msg": "not found"
-            }), 404
-    db.session.delete(query1)
-    db.session.commit()
-    return print( { "msg": "favorite id{id_people}was deleted "}), 204 
-     
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
