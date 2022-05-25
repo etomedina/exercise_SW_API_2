@@ -13,11 +13,10 @@ flask-migrate = "*"
 flask-swagger = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
-
 flask-cors = "*"
 gunicorn = "*"
-
 flask-admin = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"

@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120), nullable=False)
@@ -54,6 +55,7 @@ class item(db.Model):
     description=db.Column(db.String,nullable=True)
 
 class Character(item):
+    __tablename__ = 'character'
     # Here we define db.Columns for the table address.
     # Notice that each db.Column is also a normal Python instance attribute.
     birth_year = db.Column(db.String(250),nullable=True)
@@ -108,6 +110,7 @@ class Character(item):
         return True
 
 class Planet(item):
+    __tablename__ = 'planet'
     diameter=db.Column(db.String(250))
     rotation_period=db.Column(db.String(250))
     orbital_period=db.Column(db.String(250))
@@ -155,6 +158,7 @@ class Planet(item):
     
 
 class Vehicle(item):
+    __tablename__ = 'vehicle'
     vehicle_class=db.Column(db.String(250))
     manufacturer=db.Column(db.String(250))
     length=db.Column(db.String(250))
@@ -201,14 +205,24 @@ class Vehicle(item):
             raise Exception(error.args)
         
 class Favorite(db.Model):
+    __tablename__ = 'favorite'
+    # id=db.Column(db.Integer,primary_key=True)
+    # userid=db.Column(db.Integer)
+    # character_fav=db.Column(db.Integer)
+    # planet_fav=db.Column(db.Integer)
+    # vehicle_fav=db.Column(db.Integer)
+    
+
+
     id=db.Column(db.Integer,primary_key=True)
     id_user=db.Column(db.Integer,db.ForeignKey('user.id'))
     character_fav=db.Column(db.Integer,db.ForeignKey('character.id'))
     planet_fav=db.Column(db.Integer,db.ForeignKey('planet.id'))
     vehicle_fav=db.Column(db.Integer,db.ForeignKey('vehicle.id'))
-    
-    def __repr__(self):
-        return '<User %r>' % self.username
+
+
+    # def __repr__(self):
+    #     return '<User%r>' % self.username
 
     def serialize(self):
         return {
@@ -218,10 +232,24 @@ class Favorite(db.Model):
             "vehicle_fav": self.vehicle_fav
         }  
 
+    # def __init__(self,data):
+    #     print(data)
+    #     self.id_user= data['id_user']
+    #     self.character_fav= data['character_fav']
+    #     self.planet_fav= data['planet_fav']
+    #     self.vehicle_fav= data['vehicle_fav']
+
+    def __init__(self,**kwargs):
+        print(kwargs.items())
+        for (key, value) in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key,  value)
+
     @classmethod
     def create(cls, data):
         #Crear Instancia
         instance=cls(**data)
+        # print(instance)
         if (not isinstance(instance,cls)):
             print("FALLA EL CONSTRUCTOR")
             return None

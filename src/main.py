@@ -230,26 +230,38 @@ def get_user_favorite(id):
 #7. postear favorito, planeta por su id
 @app.route('/favorite/planet/<int:planet_fav>', methods=['POST'])
 def add_new_favorite_planet(planet_fav):
-    dictionary={}
+    
     request_body= request.json
-    planet_favorite = Favorite.create(
-        id_user= request_body['id_user'],
-        planet_fav= request_body['planet_fav']
+    dictionary={
+        "id_user": request_body['id_user'],
+        "character_fav": None,
+        "planet_fav": planet_fav,
+        "vehicle_fav": None
+    }
+    print(request_body)
+    planet_favorite = Favorite.create( 
+        data=dictionary
+        # id_user= request_body['id_user'],
+        # planet_fav= request_body['planet_fav']
     )
-    dictionary = Favorite.serialize()
-    return jsonify(dictionary), 201
+    # dictionary = planet_favorite.serialize()
+    return jsonify(planet_favorite.serialize()), 201
 
 #8. postear favorito, people por su id
 @app.route('/favorite/character/<int:character_fav>', methods=['POST'])
-def add_new_favorite_character(character_fav):
-    dictionary={}
+def add_new_favorite_character2(character_fav):
     request_body= request.json
-    planet_favorite = Favorite.create(
-        id_user= request_body['id_user'],
-        character_fav= request_body['character_fav']
-    )
-    dictionary = Favorite.serialize()
-    return jsonify(dictionary), 201
+    dictionary={
+        "id_user": request_body['id_user'],
+        "character_fav": character_fav,
+        "planet_fav": None,
+        "vehicle_fav": None
+    }
+    print(request_body)
+    planet_favorite = Favorite.create( 
+        data=dictionary
+        )
+    return jsonify(planet_favorite.serialize()), 201
 
 #9. borrar favorito, planeta por su id
 @app.route('/favorite/planet/', methods=['DELETE'])
@@ -283,8 +295,8 @@ def delete_fav_planet():
 #10. borrar favorito, people por su id
 @app.route('/favorite/character/<int:character_fav>', methods=['DELETE'])
 def delete_fav_character(character_fav):
-    id_user=request.args.get("id_user", default="", type=str)
-    id_people=request.args.get("character_fav", default="", type=str)
+    id_user=request.args.get("id_user")
+    id_people=request.args.get("character_fav")
     query = Favorite.query.get((id_user,id_people))
     query1=db.session.query(Favorite).get((id_user,id_people))
     if query is None:
